@@ -1,0 +1,1 @@
+returns a natural language description of the reason for the delay or null if this information is not available

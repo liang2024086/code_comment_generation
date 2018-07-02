@@ -1,0 +1,1 @@
+set a callback invoked by this manager when automatic join on reconnect failed if UNK is not null then automatic UNK get also enabled

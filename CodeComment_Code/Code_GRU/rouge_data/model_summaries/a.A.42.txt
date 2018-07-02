@@ -1,0 +1,1 @@
+returns whether the receiver allows or denies incoming messages or not

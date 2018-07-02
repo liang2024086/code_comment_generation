@@ -1,0 +1,1 @@
+remove the stanza id acknowledged listener for the given id

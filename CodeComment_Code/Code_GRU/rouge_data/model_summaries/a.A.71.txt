@@ -1,0 +1,1 @@
+sends the notification that the receiver of the message has cancelled composing a reply

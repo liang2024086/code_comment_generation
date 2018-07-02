@@ -1,0 +1,1 @@
+get a new stanza packet collector configuration instance

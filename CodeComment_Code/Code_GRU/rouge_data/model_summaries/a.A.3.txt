@@ -1,0 +1,1 @@
+get the group chat invitation from the given stanza

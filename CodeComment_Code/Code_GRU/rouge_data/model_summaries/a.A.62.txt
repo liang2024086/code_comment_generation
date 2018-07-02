@@ -1,0 +1,1 @@
+add a subscribe listener which is invoked on incoming subscription requests and if link subscriptionmode is set to link subscriptionmode manual this also sets subscription mode to link subscriptionmode manual

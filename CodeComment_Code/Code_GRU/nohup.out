@@ -1,0 +1,97 @@
+Traceback (most recent call last):
+  File "train.py", line 2, in <module>
+    import tensorflow as tf
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/__init__.py", line 24, in <module>
+    from tensorflow.python import *
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/__init__.py", line 104, in <module>
+    from tensorflow.python.platform import test
+  File "/usr/local/lib/python2.7/dist-packages/tensorflow/python/platform/test.py", line 53, in <module>
+    import mock                # pylint: disable=g-import-not-at-top,unused-import
+  File "/usr/local/lib/python2.7/dist-packages/mock/__init__.py", line 2, in <module>
+    import mock.mock as _mock
+  File "/usr/local/lib/python2.7/dist-packages/mock/mock.py", line 62, in <module>
+    import builtins
+  File "/usr/local/lib/python2.7/dist-packages/builtins/__init__.py", line 8, in <module>
+    from future.builtins import *
+  File "/usr/local/lib/python2.7/dist-packages/future/builtins/__init__.py", line 10, in <module>
+    from future.builtins.iterators import (filter, map, zip)
+  File "/usr/local/lib/python2.7/dist-packages/future/builtins/iterators.py", line 43, in <module>
+    from future.types import newrange as range
+  File "/usr/local/lib/python2.7/dist-packages/future/types/__init__.py", line 242, in <module>
+    from .newlist import newlist
+  File "/usr/local/lib/python2.7/dist-packages/future/types/newlist.py", line 26, in <module>
+    class BaseNewList(type):
+  File "/usr/local/lib/python2.7/dist-packages/future/types/newlist.py", line 27, in BaseNewList
+    def __instancecheck__(cls, instance):
+KeyboardInterrupt
+shape of method vectors (3663, 50)
+shape of comment array (3663, 105)
+shape of comment index (0,)
+vector size 50
+shape of bodies array (3663, 100)
+length 1770 1770
+shape of x (10, 50)
+shape of y (10, 5)
+shape of y_label (10, 5)
+shape of bodies (10, 100)
+5 (10, 1770)
+(2282, 512) (2282, 512) (2282, 50)
+shape of z (10, 512)
+shape of r (10, 512)
+shape of c (10, 50)
+shape of _state (10, 512)
+shape of output (10, 512)
+(2282, 512) (2282, 512) (2282, 50)
+shape of z (10, 512)
+shape of r (10, 512)
+shape of c (10, 50)
+shape of _state (10, 512)
+shape of output (10, 512)
+(2282, 512) (2282, 512) (2282, 50)
+shape of z (10, 512)
+shape of r (10, 512)
+shape of c (10, 50)
+shape of _state (10, 512)
+shape of output (10, 512)
+(2282, 512) (2282, 512) (2282, 50)
+shape of z (10, 512)
+shape of r (10, 512)
+shape of c (10, 50)
+shape of _state (10, 512)
+shape of output (10, 512)
+(2282, 512) (2282, 512) (2282, 50)
+shape of z (10, 512)
+shape of r (10, 512)
+shape of c (10, 50)
+shape of _state (10, 512)
+shape of output (10, 512)
+ABC 5 (10, 512) (10, 512)
+shape of W (512, 1770)
+shape of b (1770,)
+y as list 5 (10,)
+losses 5 (10,)
+[[1769  146  589 ...,    0    0    0]
+ [1769   35  509 ...,    0    0    0]
+ [1769  534  589 ...,    0    0    0]
+ ..., 
+ [1769   35 1762 ...,    0    0    0]
+ [1769   35  509 ...,    0    0    0]
+ [1769  534  589 ...,    0    0    0]]
+2017-08-05 22:45:27.297740: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-08-05 22:45:27.297776: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-08-05 22:45:27.297786: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-08-05 22:45:27.297794: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-08-05 22:45:27.297800: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2017-08-05 22:45:27.659357: I tensorflow/core/common_runtime/gpu/gpu_device.cc:887] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti
+major: 6 minor: 1 memoryClockRate (GHz) 1.6575
+pciBusID 0000:03:00.0
+Total memory: 10.91GiB
+Free memory: 2.71GiB
+2017-08-05 22:45:27.659412: I tensorflow/core/common_runtime/gpu/gpu_device.cc:908] DMA: 0 
+2017-08-05 22:45:27.659421: I tensorflow/core/common_runtime/gpu/gpu_device.cc:918] 0:   Y 
+2017-08-05 22:45:27.659437: I tensorflow/core/common_runtime/gpu/gpu_device.cc:977] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:03:00.0)
+EPOCH 1
+method vector shape (3400, 50)
+epoch: 0
+gen data 3400 340 105 21

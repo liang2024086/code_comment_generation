@@ -1,0 +1,1 @@
+stops the local socks5 proxy server if it is not running this method does nothing

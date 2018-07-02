@@ -1,0 +1,1 @@
+trigger a new candidate added event

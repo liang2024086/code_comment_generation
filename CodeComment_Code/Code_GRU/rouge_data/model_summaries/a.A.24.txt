@@ -1,0 +1,1 @@
+returns an associated UNK group that UNK room membership the value should be an UNK UNK name according to an implementation specific or UNK specific definition of a group

@@ -1,0 +1,1 @@
+returns the new of the given of the room

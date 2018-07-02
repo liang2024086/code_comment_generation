@@ -1,0 +1,1 @@
+removes the subject from the message and returns true if the subject was removed

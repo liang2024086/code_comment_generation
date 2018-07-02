@@ -1,0 +1,1 @@
+convenience method to get a property from a packet will return null if the stanza packet contains not property with the given name

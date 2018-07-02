@@ -1,0 +1,1 @@
+returns the password to use to enter password protected room a password protected room is a room that a user cannot enter without first providing the correct password
