@@ -1,0 +1,3 @@
+#!/bin/bash
+
+javac -d ./ -cp .:./mylib/* @javaFile.txt
