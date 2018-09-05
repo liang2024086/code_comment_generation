@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./ dom4j-1.6.1.jar xml-apis-1.0.b2.jar commons-io-2.4
+ .jar log4j-1.2.12.jar
+Class-Path: .
+Rsrc-Main-Class: adapt.RMM
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
+
