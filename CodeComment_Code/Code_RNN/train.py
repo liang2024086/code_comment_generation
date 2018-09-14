@@ -118,7 +118,7 @@ def save_data_yield(level_trees,node_type_size,level_width,method_indexes,tree_d
 
     np.save('./test_data/method_indexes_%d.npy'%step,np.array(method_indexes))
 
-    data_file = open('./test_data/tree_data.txt','w')
+    data_file = open('./testdata/tree_data.txt','w')
     try:
         data_file.write('%d\n'%node_type_size)
         data_file.write('%d\n'%level_width)
@@ -150,6 +150,53 @@ def load_test_data():
 
     return partial_trees,node_type_size,level_width,method_indexes,_tree_depth
 
+def load_val_data():
+    partial_trees = np.load('./val_data/level_tree.npy')
+    method_indexes = np.load('./val_data/method_indexes.npy')
+
+    data_file = open('./val_data/tree_data.txt','r')
+    data_lines = data_file.readlines()
+    node_type_size = int(data_lines[0].strip())
+    level_width = int(data_lines[1].strip())
+    _tree_depth = int(data_lines[2].strip())
+
+    return partial_trees,node_type_size,level_width,method_indexes,_tree_depth
+
+def load_rename_data():
+    partial_trees = np.load('./rename_data/level_tree.npy')
+    method_indexes = np.load('./rename_data/method_indexes.npy')
+
+    data_file = open('./rename_data/tree_data.txt','r')
+    data_lines = data_file.readlines()
+    node_type_size = int(data_lines[0].strip())
+    level_width = int(data_lines[1].strip())
+    _tree_depth = int(data_lines[2].strip())
+
+    return partial_trees,node_type_size,level_width,method_indexes,_tree_depth
+
+def load_before_data():
+    partial_trees = np.load('./before_rename_data/level_tree.npy')
+    method_indexes = np.load('./before_rename_data/method_indexes.npy')
+
+    data_file = open('./before_rename_data/tree_data.txt','r')
+    data_lines = data_file.readlines()
+    node_type_size = int(data_lines[0].strip())
+    level_width = int(data_lines[1].strip())
+    _tree_depth = int(data_lines[2].strip())
+
+    return partial_trees,node_type_size,level_width,method_indexes,_tree_depth
+
+def load_test_new_data():
+    partial_trees = np.load('./test_new_data/level_tree.npy')
+    method_indexes = np.load('./test_new_data/method_indexes.npy')
+
+    data_file = open('./test_new_data/tree_data.txt','r')
+    data_lines = data_file.readlines()
+    node_type_size = int(data_lines[0].strip())
+    level_width = int(data_lines[1].strip())
+    _tree_depth = int(data_lines[2].strip())
+
+    return partial_trees,node_type_size,level_width,method_indexes,_tree_depth
 
 if __name__ == '__main__':
 
@@ -185,16 +232,6 @@ if __name__ == '__main__':
 	    data_file.close()
 
         '''
-
-
-	which_cluster, cluster_name_to_index  = np.array(partial_tree.gen_raw_method_cluster('./data/methodMap.txt',6648))
-	data_file = open('./data/cluster.txt','w')
-        try:
-            for (name,index) in cluster_name_to_index.items():
-                data_file.write('%s,%d\n'%(name,index))
-        finally:
-            data_file.close()
-
 
         partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = load_data()
 

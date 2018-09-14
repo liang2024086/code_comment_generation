@@ -112,25 +112,22 @@ def eval_network(sess,g,num_epochs, data_size,partial_trees,wether_train,num_met
 
 def eval():
 
-    abc = 3
+    abc = 5
 
     if True:
 
 	if abc == 0:
-	    which_cluster, cluster_name_to_index  = np.array(partial_tree.gen_raw_method_cluster('./data/methodMap.txt',6648))
-
 	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_data()
+	elif abc == 1:
+	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_val_data()
+	elif abc == 2:
+	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_test_new_data()
 	elif abc == 3:
-	    which_cluster, cluster_name_to_index  = np.array(partial_tree.gen_raw_method_cluster('./test_data/methodMap.txt',30))
-
 	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_test_data()
-
-	data_file = open('./data/cluster.txt','w')
-    	try:
-            for (name,index) in cluster_name_to_index.items():
-                data_file.write('%s,%d\n'%(name,index))
-    	finally:
-            data_file.close()
+	elif abc == 4:
+	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_rename_data()
+	elif abc == 5:
+	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_before_data()
 
         print 'num of tress',len(partial_trees)
         print 'node type size:',node_type_size
@@ -142,10 +139,18 @@ def eval():
 
     	    accuracy_array = []
     	    for i in range(1):
-		if abc == 0:
+		if abc == 1:
+	            accuracy, result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=1,num_methods=1997,state_size=state_size,save='weight_average_tmp/GCD/weight',cross_validation_index=i)
+		elif abc == 0:
 	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=0,num_methods=6648,state_size=state_size,save='weight_average_tmp/GCD/weight',cross_validation_index=i)
+		elif abc == 2:
+	            accuracy, result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=2,num_methods=723,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
 		elif abc == 3:
-	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=3,num_methods=30,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
+	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=3,num_methods=2079,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
+		elif abc == 4:
+	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=4,num_methods=30,state_size=state_size,save='weight_average/GCD/weight',cross_validation_index=i)
+		elif abc == 5:
+	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=5,num_methods=30,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
 	        accuracy_array.append(accuracy)
 
 		matrix = [ [0 for k in range(6)] for j in range(6)]
@@ -188,9 +193,17 @@ def eval():
     
 		member_num = 0 
 		if abc == 3:
-                    member_num = 30
+                    member_num = 2079
+                elif abc == 2:
+                    member_num = 723
+                elif abc == 1:
+                    member_num = 1997
                 elif abc == 0:
                     member_num = 6648
+                elif abc == 4:
+                    member_num = 30
+                elif abc == 5:
+                    member_num = 30
  
 		e = 0  
 		p = 0             
@@ -210,9 +223,15 @@ def eval():
     	    for i in accuracy_array:
 	        num += i
 
-            if abc == 3:
-                print 'accuracy',float(num)/30
-                return float(num) / 30
+	    if abc == 1:
+                print 'accuracy',float(num)/1997
+                return float(num) / 1997
+            elif abc == 3:
+                print 'accuracy',float(num)/2079
+                return float(num) / 2079
+            elif abc == 2:
+                print 'accuracy',float(num)/723
+                return float(num) / 723
             elif abc == 0:
                 print 'accuracy',float(num)/6648
                 return float(num) / 6648

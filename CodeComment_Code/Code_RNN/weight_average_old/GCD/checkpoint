@@ -1,0 +1,3 @@
+model_checkpoint_path: "weight"
+all_model_checkpoint_paths: "../../weight_average_tmp/GCD/weight"
+all_model_checkpoint_paths: "weight"

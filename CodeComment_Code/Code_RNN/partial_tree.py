@@ -546,8 +546,16 @@ def gen_epochs(n,batch_size,partial_trees,wether_train,cross_validation_index,nu
     if wether_train == 0:
         which_cluster, cluster_name_to_index  = gen_raw_method_cluster('./data/methodMap.txt',num_methods)
 	which_cluster = np.array(which_cluster)
+    elif wether_train == 1:
+        which_cluster = np.array(gen_test_method_cluster('./val_data/methodMap.txt',num_methods))
+    elif wether_train == 2:
+        which_cluster = np.array(gen_test_method_cluster('./test_new_data/methodMap.txt',num_methods))
     elif wether_train == 3:
         which_cluster = np.array(gen_test_method_cluster('./test_data/methodMap.txt',num_methods))
+    elif wether_train == 4:
+        which_cluster = np.array(gen_test_method_cluster('./rename_data/methodMap.txt',num_methods))
+    elif wether_train == 5:
+        which_cluster = np.array(gen_test_method_cluster('./before_rename_data/methodMap.txt',num_methods))
 
     a0 = np.where(which_cluster == 0)[0]
     a1 = np.where(which_cluster == 1)[0]
@@ -678,4 +686,47 @@ def gen_epochs(n,batch_size,partial_trees,wether_train,cross_validation_index,nu
     for i in range(n):
         yield gen_batch(batch_size,input_trees,np.array(input_which_cluster))
         #yield gen_batch(methodComments,batch_size,indexToWord,maxLength,partial_trees)
+
+if __name__ == '__main__':
+
+#    which_cluster. cluster_name_to_Index = gen_raw_method_cluster('./data/methodMap.txt',27233)
+#    print which_cluster
+
+    '''
+    parseTree, maxLength, parse_tree_depth1, parse_tree_width = _read_parse_tree('rename_data/parseTree.txt')
+    print ('maximum number of nodes',maxLength)
+    print ('max depth of trees',parse_tree_depth1)
+    print ('max num of leaf nodes',parse_tree_width)
+    print 'num of parse trees', len(parseTree)
+
+    partial_trees,node_type_size,level_width,method_indexes = gen_parse_tree_matrix(parseTree,parse_tree_depth1,parse_tree_width,0)
+
+    print 'num of tress',len(partial_trees)
+    print 'node type size:',node_type_size
+    print 'max width of every level:',level_width
+
+    train.save_data(partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth1)
+
+
+#    cluster = _read_cluster('./data/cluster.txt')
+#    print cluster
+
+#    gen_test_method_cluster('./test_new_data/methodMap.txt',723)
+    '''
+
+#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./before_rename_data/methodMap.txt',30))
+#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./rename_data/methodMap.txt',30))
+    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./test_new_data/methodMap.txt',723))
+#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./test_data/methodMap.txt',2079))
+#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./val_data/methodMap.txt',1997))
+#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./all_data/methodMap.txt',27233))
+#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./data/methodMap.txt',6648))
+
+    data_file = open('./data/cluster.txt','w')
+    try:
+        for (name,index) in cluster_name_to_index.items():
+            data_file.write('%s,%d\n'%(name,index))
+    finally:
+        data_file.close()
+
 
