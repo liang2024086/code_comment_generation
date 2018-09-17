@@ -60,7 +60,7 @@ def build_graph(batch_size, state_size, learning_rate, num_steps,vector_size,num
 
 #	cell = tf.contrib.rnn.BasicRNNCell(state_size,activation=tf.nn.relu)
 	cell = CommentRNNCell(state_size,x,vector_size,num_classes,W_rnn,b_rnn,W_z,W_r,W_c,activation=tf.nn.tanh)
-	cell = tf.nn.rnn_cell.DropoutWrapper(cell,input_keep_prob=input_keep_prob,output_keep_prob=output_keep_prob)
+	cell = tf.contrib.rnn.core_rnn_cell.DropoutWrapper(cell,input_keep_prob=input_keep_prob,output_keep_prob=output_keep_prob)
 
 	rnn_outputs, final_state = tf.contrib.rnn.static_rnn(cell, rnn_inputs, initial_state=init_state)
 

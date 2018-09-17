@@ -107,23 +107,23 @@ def begin_eval(para):
 
     repo = 'Smack'
 
-    methods = np.load('data/comment_%s_data/comment_method_vector.npy'%repo)
+    methods = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_method_vector.npy'%repo)
     print 'shape of method vectors',methods.shape
 
-    comment_array = np.load('data/comment_%s_data/comment_array.npy'%repo)
+    comment_array = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_array.npy'%repo)
     print 'shape of comment array',comment_array.shape
 
     vector_size = len(methods[0])
     print 'vector size',vector_size
 
-    bodies_array = np.load('data/body/body_%s/bodies_array.npy'%repo)
+    bodies_array = np.load('../CommentRNNThresholdunkGRUAttention/body/body_%s/bodies_array.npy'%repo)
     print 'shape of bodies array',bodies_array.shape
     body_length = len(bodies_array[0])
 
-    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('data/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
+    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
     body_vocab_size = len(bodyWordToIndex)
 
-    wordToIndex, indexToWord = reader._read_comments_word('data/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
+    wordToIndex, indexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
     print 'length',len(wordToIndex),len(indexToWord)
     num_classes = len(wordToIndex)
 

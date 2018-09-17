@@ -12,6 +12,57 @@ state_size = 512
 num_steps = 5
 learning_rate = 0.05
 
+def gen_comment_array():
+
+    repo_name = 'Smack'
+
+    methods = np.load('../CommentRNN/gen_vector/method_vector/methods_%s.npy'%repo_name)
+    print 'shape of method vectors',methods.shape
+
+    method_indexes =np.load('../CommentRNN/gen_vector/method_vector/methods_%s_indexes.npy'%repo_name)
+    print 'shape of method indexes',method_indexes.shape
+
+    wordToIndex, indexToWord = reader._read_comments_word('./buildData/comment_words/repo_%s/commentWordMap.txt'%repo_name)
+
+    methodComments,maxLength = reader._read_comments('../CommentRNN/gen_vector/repo_%s/methodCommentMap.txt'%repo_name,wordToIndex)
+
+    #print methodComments
+
+    comments = []
+    comments_index = []
+    commented_method_vector = []
+
+    _maxLength = 100
+
+    for (index,one_comment) in methodComments.items():
+
+	if not int(index) in method_indexes:
+	    continue
+
+	one_length = len(one_comment)
+	new_comment = []
+	for i in range(_maxLength+num_steps):
+	    #new_comment.append(int(one_comment[i%one_length]))
+	    if i < one_length:
+		new_comment.append(int(one_comment[i]))
+	    else:
+		new_comment.append(int(wordToIndex['</s>']))
+    	comments.append(new_comment)
+
+	print new_comment
+
+	commented_method_vector.append(methods[np.where(method_indexes==int(index))[0][0]])
+	
+    commented_method_vector = np.array(commented_method_vector)
+    comments = np.array(comments)
+    comments_index = np.array(comments_index)
+    np.save('./comment_%s_data/comment_method_vector.npy'%repo_name,commented_method_vector)
+    np.save('./comment_%s_data/comment_array.npy'%repo_name,comments)
+    np.save('./comment_%s_data/comment_index.npy'%repo_name,comments_index)
+    print 'save comment array successful'
+
+    return comments
+
 def train(sess,num_epochs,batch_size,num_steps,method_vectors,method_comments,bodies_array,g,indexToWord):
 
     # determine the number of threads
@@ -61,6 +112,7 @@ def train(sess,num_epochs,batch_size,num_steps,method_vectors,method_comments,bo
 if __name__ == '__main__':
 
     '''
+    gen_comment_array()
 
     repo = 'all'
 
@@ -81,34 +133,28 @@ if __name__ == '__main__':
     #random_index = np.load('./comment_%s_data/random_index_array.npy'%repo)
     #print 'shape of random index',random_index.shape
 
-    methods = np.load('data/comment_%s_data/comment_method_vector.npy'%repo)
+    methods = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_method_vector.npy'%repo)
     print 'shape of method vectors',methods.shape
 
-    comment_array = np.load('data/comment_%s_data/comment_array.npy'%repo)
+    comment_array = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_array.npy'%repo)
     print 'shape of comment array',comment_array.shape
 
-    comment_indexes = np.load('data/comment_%s_data/comment_index.npy'%repo)
+    comment_indexes = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_index.npy'%repo)
     print 'shape of comment index',comment_indexes.shape
 
     vector_size = len(methods[0])
     print 'vector size',vector_size
 
-    bodies_array = np.load('data/body/body_%s/bodies_array.npy'%repo)
+    bodies_array = np.load('../CommentRNNThresholdunkGRUAttention/body/body_%s/bodies_array.npy'%repo)
     print 'shape of bodies array',bodies_array.shape
     body_length = len(bodies_array[0])
 
-    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('data/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
+    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
     body_vocab_size = len(bodyWordToIndex)
 
-    wordToIndex, indexToWord = reader._read_comments_word('data/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
+    wordToIndex, indexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
     print 'length',len(wordToIndex),len(indexToWord)
     num_classes = len(wordToIndex)
-
-    if not os.path.exists('CR'):
-    	os.makedirs('CR')
-    if not os.path.exists('CR_temp'):
-    	os.makedirs('CR_temp')
-
 
     g = model.build_graph(batch_size,state_size,learning_rate,num_steps,vector_size,num_classes,body_length,body_vocab_size)
 

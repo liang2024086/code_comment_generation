@@ -109,7 +109,8 @@ def eval(sess,num_epochs,batch_size,num_steps,num_classes,method_vectors,method_
 
 def begin_eval(para,penalty):
 
-    repo = 'Smack'
+    repo = 'NanoXML'
+    train_repo = 'Smack'
 
     methods = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_method_vector.npy'%repo)
     #print 'shape of method vectors',methods.shape
@@ -124,10 +125,10 @@ def begin_eval(para,penalty):
     #print 'shape of bodies array',bodies_array.shape
     body_length = len(bodies_array[0])
 
-    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
+    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/body_words/repo_%s/bodyWordMap.txt'%train_repo)
     body_vocab_size = len(bodyWordToIndex)
 
-    wordToIndex, indexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
+    wordToIndex, indexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/comment_words/repo_%s/commentWordMap.txt'%train_repo)
     #print 'length',len(wordToIndex),len(indexToWord)
     num_classes = len(wordToIndex)
 
@@ -154,7 +155,12 @@ def begin_eval(para,penalty):
 	g['saver'].restore(sess,'CR_temp/weight')
     else:
 	#g['saver'].restore(sess,'CR/weight')
-	g['saver'].restore(sess,'CR_%s_tab/weight'%repo)
+	g['saver'].restore(sess,'CR_%s_tab/weight'%train_repo)
+
+    '''
+	NanoXML
+    '''
+    system_strings, model_strings = eval(sess,99,batch_size,num_steps,num_classes,methods[0:99],comment_array[0:99],bodies_array[0:99],g,indexToWord,wordToIndex,para)
 
     '''
 	jersey
@@ -166,8 +172,8 @@ def begin_eval(para,penalty):
     '''
 	Smack
     system_strings, model_strings = eval(sess,80,batch_size,num_steps,num_classes,methods[2100:2180],comment_array[2100:2180],bodies_array[2100:2180],g,indexToWord,wordToIndex,para)
-    '''
     system_strings, model_strings = eval(sess,162,batch_size,num_steps,num_classes,methods[2180:2342],comment_array[2180:2342],bodies_array[2180:2342],g,indexToWord,wordToIndex,para)
+    '''
 
     '''
 	guava
