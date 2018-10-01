@@ -32,11 +32,13 @@ public class Main{
 
 	public static void main(String args[]) throws IOException{
 
-		Properties props = new Properties();
+		/*Properties props = new Properties();
 		props.load(new FileInputStream("param.properties"));
 		String param1 = props.getProperty("repoNames");
 		names = param1.split(",");
-
+		*/
+		names = args;
+		
 		Bmcl.vocabulary = new Vocabulary(Bmcl.dim);
 		Bmcl.codeFW = new FileWriter("./output/parseTree.txt");
 		Bmcl.codePW = new PrintWriter(Bmcl.codeFW);

@@ -170,11 +170,13 @@ public class CallGraphGenerator{
 		PropertyConfigurator.configure("log4j2.properties");
 		//
 		//read params from properties file
-		Properties props=new Properties();
+		/*Properties props=new Properties();
 		props.load(new FileInputStream("param.properties"));
 		String nameString=props.getProperty("repoNames");
-		//
-		String[] names=nameString.split(",");
+		
+		String[] names=nameString.split(",");*/
+
+		String[] names = args;
 		String preFix="data/";
 		String postFix="JavaFile.txt";
 		String outputPostFix="CallGraph.txt";
