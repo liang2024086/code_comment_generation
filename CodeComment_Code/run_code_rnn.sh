@@ -55,7 +55,6 @@ if [ ! -d "data/" ]; then
 fi
 cp ../GetParseTree/output/* data/
 python gen_data.py train
-cd ..
 
 echo "-- begin to train"
 python train.py ${LIMIT}

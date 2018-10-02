@@ -546,8 +546,6 @@ def gen_epochs(n,batch_size,partial_trees,wether_train,cross_validation_index,nu
     if wether_train == 0:
         which_cluster, cluster_name_to_index  = gen_raw_method_cluster('./data/methodMap.txt',num_methods)
 	which_cluster = np.array(which_cluster)
-    elif wether_train == 1:
-        which_cluster = np.array(gen_test_method_cluster('./val_data/methodMap.txt',num_methods))
     elif wether_train == 2:
         which_cluster = np.array(gen_test_method_cluster('./test_data/methodMap.txt',num_methods))
     elif wether_train == 3:

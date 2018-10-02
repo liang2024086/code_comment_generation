@@ -201,7 +201,7 @@ def load_test_new_data():
 
 if __name__ == '__main__':
 
-    not_increase_limit = sys.argv[1]
+    not_increase_limit = int(sys.argv[1])
     if True:
 
 

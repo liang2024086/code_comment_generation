@@ -54,9 +54,7 @@ def eval_network(sess,g,num_epochs, data_size,partial_trees,wether_train,num_met
 
 def eval(type):
 
-    if type == 'val':
-        abc = 1
-    elif type == 'train':
+    if type == 'train':
         abc = 0
     elif type == 'test':
         abc = 2
@@ -65,8 +63,6 @@ def eval(type):
 
 	if abc == 0:
 	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_data()
-	elif abc == 1:
-	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_val_data()
 	elif abc == 2:
 	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_test_data()
 
@@ -80,9 +76,7 @@ def eval(type):
 
     	    accuracy_array = []
     	    for i in range(1):
-		if abc == 1:
-	            accuracy, result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=1,num_methods=1997,state_size=state_size,save='weight_average_tmp/GCD/weight',cross_validation_index=i)
-		elif abc == 0:
+		if abc == 0:
 	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=0,num_methods=6648,state_size=state_size,save='weight_average_tmp/GCD/weight',cross_validation_index=i)
 		elif abc == 2:
 	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=2,num_methods=30,state_size=state_size,save='weight_average/GCD/weight',cross_validation_index=i)
@@ -129,8 +123,6 @@ def eval(type):
 		member_num = 0 
                 if abc == 2:
                     member_num = 30
-                elif abc == 1:
-                    member_num = 1997
                 elif abc == 0:
                     member_num = 6648
  
@@ -152,10 +144,7 @@ def eval(type):
     	    for i in accuracy_array:
 	        num += i
 
-	    if abc == 1:
-                print 'accuracy',float(num)/1997
-                return float(num) / 1997
-            elif abc == 2:
+            if abc == 2:
                 print 'accuracy',float(num)/30
                 return float(num) / 30
             elif abc == 0:
