@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 import time
 import os
+import sys
 
 import reader
 import model
@@ -12,58 +13,7 @@ state_size = 512
 num_steps = 5
 learning_rate = 0.05
 
-def gen_comment_array():
-
-    repo_name = 'Smack'
-
-    methods = np.load('../CommentRNN/gen_vector/method_vector/methods_%s.npy'%repo_name)
-    print 'shape of method vectors',methods.shape
-
-    method_indexes =np.load('../CommentRNN/gen_vector/method_vector/methods_%s_indexes.npy'%repo_name)
-    print 'shape of method indexes',method_indexes.shape
-
-    wordToIndex, indexToWord = reader._read_comments_word('./buildData/comment_words/repo_%s/commentWordMap.txt'%repo_name)
-
-    methodComments,maxLength = reader._read_comments('../CommentRNN/gen_vector/repo_%s/methodCommentMap.txt'%repo_name,wordToIndex)
-
-    #print methodComments
-
-    comments = []
-    comments_index = []
-    commented_method_vector = []
-
-    _maxLength = 100
-
-    for (index,one_comment) in methodComments.items():
-
-	if not int(index) in method_indexes:
-	    continue
-
-	one_length = len(one_comment)
-	new_comment = []
-	for i in range(_maxLength+num_steps):
-	    #new_comment.append(int(one_comment[i%one_length]))
-	    if i < one_length:
-		new_comment.append(int(one_comment[i]))
-	    else:
-		new_comment.append(int(wordToIndex['</s>']))
-    	comments.append(new_comment)
-
-	print new_comment
-
-	commented_method_vector.append(methods[np.where(method_indexes==int(index))[0][0]])
-	
-    commented_method_vector = np.array(commented_method_vector)
-    comments = np.array(comments)
-    comments_index = np.array(comments_index)
-    np.save('./comment_%s_data/comment_method_vector.npy'%repo_name,commented_method_vector)
-    np.save('./comment_%s_data/comment_array.npy'%repo_name,comments)
-    np.save('./comment_%s_data/comment_index.npy'%repo_name,comments_index)
-    print 'save comment array successful'
-
-    return comments
-
-def train(sess,num_epochs,batch_size,num_steps,method_vectors,method_comments,bodies_array,g,indexToWord):
+def train(sess,num_epochs,batch_size,num_steps,method_vectors,method_comments,bodies_array,g,indexToWord,repo,train_index,val_index):
 
     # determine the number of threads
     #with tf.Session(config=tf.ConfigProto(
@@ -98,11 +48,13 @@ def train(sess,num_epochs,batch_size,num_steps,method_vectors,method_comments,bo
 		count += 1
 
 
+	    if not os.path.exists('CR_temp'):
+                os.makedirs('CR_temp')
 	    g['saver'].save(sess,'CR_temp/weight')
 	    print 'time',time.time()-time_start,'s'
 	    print 'epoch loss',total_loss/count
 	    
-	value, result_info = eval.begin_eval(1)
+	value, result_info = eval.begin_eval(1,repo,train_index,val_index)
 		#os.system('python eval.py 1')
 
 	return value,result_info
@@ -111,48 +63,31 @@ def train(sess,num_epochs,batch_size,num_steps,method_vectors,method_comments,bo
 
 if __name__ == '__main__':
 
-    '''
-    gen_comment_array()
+    repo = sys.argv[1]
+    train_index = int(sys.argv[2])
+    val_index= int(sys.argv[3])
+    epoch_num = int(sys.argv[4])
 
-    repo = 'all'
-
-    methods = np.load('./comment_%s_data/comment_method_vector.npy'%repo)
+    methods = np.load('./data/comment_%s_data/comment_method_vector.npy'%repo)
     print 'shape of method vectors',methods.shape
 
-    index_array = [ i for i in range(len(methods))]
-    print index_array
-
-    index_array = np.random.permutation(index_array)
-    print index_array
-
-    np.save('./comment_all_data/random_index_array.npy',index_array)
-
-    '''
-    repo = 'Smack'
-
-    #random_index = np.load('./comment_%s_data/random_index_array.npy'%repo)
-    #print 'shape of random index',random_index.shape
-
-    methods = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_method_vector.npy'%repo)
-    print 'shape of method vectors',methods.shape
-
-    comment_array = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_array.npy'%repo)
+    comment_array = np.load('./data/comment_%s_data/comment_array.npy'%repo)
     print 'shape of comment array',comment_array.shape
 
-    comment_indexes = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_index.npy'%repo)
+    comment_indexes = np.load('./data/comment_%s_data/comment_index.npy'%repo)
     print 'shape of comment index',comment_indexes.shape
 
     vector_size = len(methods[0])
     print 'vector size',vector_size
 
-    bodies_array = np.load('../CommentRNNThresholdunkGRUAttention/body/body_%s/bodies_array.npy'%repo)
+    bodies_array = np.load('./data/body/body_%s/bodies_array.npy'%repo)
     print 'shape of bodies array',bodies_array.shape
     body_length = len(bodies_array[0])
 
-    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
+    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('./data/body_words/bodyWordMap.txt')
     body_vocab_size = len(bodyWordToIndex)
 
-    wordToIndex, indexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
+    wordToIndex, indexToWord = reader._read_comments_word('./data/comment_words/commentWordMap.txt')
     print 'length',len(wordToIndex),len(indexToWord)
     num_classes = len(wordToIndex)
 
@@ -174,144 +109,14 @@ if __name__ == '__main__':
 	count += 1
 	print 'EPOCH',count
 
-	'''
-	    CoreNLP  4311
-		train: 4000
-		validation: 100
-		test: 211
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:4000],comment_array[:4000],bodies_array[:4000],g,indexToWord) 
-	'''
-
-	'''
-	    Smack 2342
-		train: 2100
-		validation: 80
-		test: 162
-	'''
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:2100],comment_array[:2100],bodies_array[:2100],g,indexToWord) 
-
-	'''
-            jersey 2539
-                train: 2300
-                validation: 50
-                test: 189
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:2300],comment_array[:2300],bodies_array[:2300],g,indexToWord)
-        '''
-
-	'''
-            guava 2530
-                train 2300
-                validation: 70
-                test: 160
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:2300],comment_array[:2300],bodies_array[:2300],g,indexToWord)
-        '''
-
-	'''
-            elasticsearch  3663
-                train 3400
-                validation: 80
-                test: 183
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:3400],comment_array[:3400],bodies_array[:3400],g,indexToWord)
-        '''
-
-	'''
-            jclouds 1598
-                train 1400
-                validation 70
-                test 128
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1400],comment_array[:1400],bodies_array[:1400],g,indexToWord)
-        '''
-
-        '''
-            functionaljava
-                train 2100
-                validation 40
-                test 123
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:2100],comment_array[:2100],bodies_array[:2100],g,indexToWord)
-        '''
-
-	''' 
-            jmonkeyengine 3630
-                train 3400
-                validation 50
-                test 180
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:3400],comment_array[:3400],bodies_array[:3400],g,indexToWord)
-        '''
-
-	'''
-            jOOQ 1984
-                train 1700
-                validation 80
-                test 204
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1700],comment_array[:1700],bodies_array[:1700],g,indexToWord)
-        '''
-
-	'''
-            weblaf 4171
-                train 3900
-                validation 80
-                test 191
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:3900],comment_array[:3900],bodies_array[:3900],g,indexToWord)
-        '''
-
-	'''
-            rhino 1187
-                train 1000
-                validation 40
-                test 147
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1000],comment_array[:1000],bodies_array[:1000],g,indexToWord)
-        '''
-
         '''
             cocos2d 1181
                 train 1000
                 validation 40
                 test 141
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1000],comment_array[:1000],bodies_array[:1000],g,indexToWord)
         '''
+        value,result_info = train(sess,1,batch_size,num_steps,methods[:train_index],comment_array[:train_index],bodies_array[:train_index],g,indexToWord,repo,train_index,val_index)
 
-        '''
-            Activiti 1071
-                train 900
-                validation 40
-                test 131
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:900],comment_array[:900],bodies_array[:900],g,indexToWord)
-        '''
-
-        '''
-            neo4j 1197
-                train 1000
-                validation 40
-                test 157
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1000],comment_array[:1000],bodies_array[:1000],g,indexToWord)
-        '''
-
-        '''
-            libgdx 2823
-                train 2600
-                validation 50
-                test 173
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:2600],comment_array[:2600],bodies_array[:2600],g,indexToWord)
-        '''
-
-	'''
-	    spring-batch 1827
-		train 1600
-		validation 50
-		test 177
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1600],comment_array[:1600],bodies_array[:1600],g,indexToWord)
-	'''
-
-	'''
-	    aima-java 1127
-		train 1000
-		validation 27
-		test 100
-        value,result_info = train(sess,1,batch_size,num_steps,methods[:1000],comment_array[:1000],bodies_array[:1000],g,indexToWord)
-	'''
-
-        #value,result_info = train(sess,1,batch_size,num_steps,methods[random_index[:6000]],comment_array[random_index[:6000]],g,indexToWord) 
-        #train(sess,1,batch_size,num_steps,methods,comment_array,g,indexToWord) 
 	print 'F2 VALUE',value,previous_value,not_increase
 
 	if value <= previous_value:
@@ -319,12 +124,15 @@ if __name__ == '__main__':
 	else:
 	    not_increase = 1
 	    previous_value = value
+	    if not os.path.exists('CR'):
+                os.makedirs('CR')
 	    g['saver'].save(sess,'CR/weight')
 	    print 'save'
 	    print result_info
 
 	#if not_increase == 100:
-	if count == 800:
+	#if count == 800:
+	if count >= epoch_num:
 	    break
 
     sess.close()

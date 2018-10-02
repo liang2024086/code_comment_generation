@@ -1,1 +1,0 @@
-fires roster changed event to roster listeners indicating that the specified UNK of contacts have been added updated or deleted from the roster

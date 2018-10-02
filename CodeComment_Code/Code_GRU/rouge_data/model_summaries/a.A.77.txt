@@ -1,1 +1,0 @@
-initializes the context of the test case we will first try to load the configuration from a file whose name is UNK by the test case class name UNK an xml extension e g UNK xml if no file was found under that name then we will try to load the default configuration for all the test cases from the file UNK test case xml

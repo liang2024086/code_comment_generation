@@ -1,1 +1,0 @@
-reset socks5 proxy settings

@@ -1,1 +1,0 @@
-UNK presences from entity from one presence map to another

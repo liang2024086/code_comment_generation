@@ -103,27 +103,25 @@ def eval(sess,num_epochs,batch_size,num_steps,num_classes,method_vectors,method_
 
 	return system_strings,model_strings
 
-def begin_eval(para):
+def begin_eval(para,repo,train_index,val_index):
 
-    repo = 'Smack'
-
-    methods = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_method_vector.npy'%repo)
+    methods = np.load('./data/comment_%s_data/comment_method_vector.npy'%repo)
     print 'shape of method vectors',methods.shape
 
-    comment_array = np.load('../CommentRNNThresholdunkGRUAttention/comment_%s_data/comment_array.npy'%repo)
+    comment_array = np.load('./data/comment_%s_data/comment_array.npy'%repo)
     print 'shape of comment array',comment_array.shape
 
     vector_size = len(methods[0])
     print 'vector size',vector_size
 
-    bodies_array = np.load('../CommentRNNThresholdunkGRUAttention/body/body_%s/bodies_array.npy'%repo)
+    bodies_array = np.load('./data/body/body_%s/bodies_array.npy'%repo)
     print 'shape of bodies array',bodies_array.shape
     body_length = len(bodies_array[0])
 
-    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/body_words/repo_%s/bodyWordMap.txt'%repo)
+    bodyWordToIndex, bodyIndexToWord = reader._read_comments_word('./data/body_words/bodyWordMap.txt')
     body_vocab_size = len(bodyWordToIndex)
 
-    wordToIndex, indexToWord = reader._read_comments_word('../CommentRNNThresholdunkGRUAttention/buildData/comment_words/repo_%s/commentWordMap.txt'%repo)
+    wordToIndex, indexToWord = reader._read_comments_word('./data/comment_words/commentWordMap.txt')
     print 'length',len(wordToIndex),len(indexToWord)
     num_classes = len(wordToIndex)
 
@@ -144,111 +142,7 @@ def begin_eval(para):
 	#g['saver'].restore(sess,'CR/weight')
 	g['saver'].restore(sess,'CR_%s_tab/weight'%repo)
 
-    '''
-        CoreNLP
-    system_strings, model_strings = eval(sess,100,batch_size,num_steps,num_classes,methods[4000:4100],comment_array[4000:4100],bodies_array[4000:4100],g,indexToWord,wordToIndex,para)
-    '''
-
-
-    '''
-	jersey
-
-    system_strings, model_strings = eval(sess,189,batch_size,num_steps,num_classes,methods[2350:2539],comment_array[2350:2539],bodies_array[2350:2539],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,50,batch_size,num_steps,num_classes,methods[2300:2350],comment_array[2300:2350],bodies_array[2300:2350],g,indexToWord,wordToIndex,para)
-    '''
-
-
-    '''
-	Smack
-    system_strings, model_strings = eval(sess,162,batch_size,num_steps,num_classes,methods[2180:2342],comment_array[2180:2342],bodies_array[2180:2342],g,indexToWord,wordToIndex,para)
-    '''
-    system_strings, model_strings = eval(sess,80,batch_size,num_steps,num_classes,methods[2100:2180],comment_array[2100:2180],bodies_array[2100:2180],g,indexToWord,wordToIndex,para)
-
-
-    '''
-        guava
-    system_strings, model_strings = eval(sess,160,batch_size,num_steps,num_classes,methods[2370:2530],comment_array[2370:2530],bodies_array[2370:2530],g,indexToWord,wordToIndex,2)
-    system_strings, model_strings = eval(sess,70,batch_size,num_steps,num_classes,methods[2300:2370],comment_array[2300:2370],bodies_array[2300:2370],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-        elasticsearch
-    system_strings, model_strings = eval(sess,80,batch_size,num_steps,num_classes,methods[3400:3480],comment_array[3400:3480],bodies_array[3400:3480],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,183,batch_size,num_steps,num_classes,methods[3480:3663],comment_array[3480:3663],bodies_array[3480:3663],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	jclouds
-    system_strings, model_strings = eval(sess,70,batch_size,num_steps,num_classes,methods[1400:1470],comment_array[1400:1470],bodies_array[1400:1470],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,128,batch_size,num_steps,num_classes,methods[1470:1598],comment_array[1470:1598],bodies_array[1470:1598],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	functionaljava
-    system_strings, model_strings = eval(sess,40,batch_size,num_steps,num_classes,methods[2100:2140],comment_array[2100:2140],bodies_array[2100:2140],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,123,batch_size,num_steps,num_classes,methods[2140:2263],comment_array[2140:2263],bodies_array[2140:2263],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	jmonkeyengine
-    system_strings, model_strings = eval(sess,50,batch_size,num_steps,num_classes,methods[3400:3450],comment_array[3400:3450],bodies_array[3400:3450],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,180,batch_size,num_steps,num_classes,methods[3450:3630],comment_array[3450:3630],bodies_array[3450:3630],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	jOOQ
-    system_strings, model_strings = eval(sess,80,batch_size,num_steps,num_classes,methods[1700:1780],comment_array[1700:1780],bodies_array[1700:1780],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,204,batch_size,num_steps,num_classes,methods[1780:1984],comment_array[1780:1984],bodies_array[1780:1984],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	weblaf
-    system_strings, model_strings = eval(sess,80,batch_size,num_steps,num_classes,methods[3900:3980],comment_array[3900:3980],bodies_array[3900:3980],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,191,batch_size,num_steps,num_classes,methods[3980:4171],comment_array[3980:4171],bodies_array[3980:4171],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	rhino
-    system_strings, model_strings = eval(sess,147,batch_size,num_steps,num_classes,methods[1040:1187],comment_array[1040:1187],bodies_array[1040:1187],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,40,batch_size,num_steps,num_classes,methods[1000:1040],comment_array[1000:1040],bodies_array[1000:1040],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	cocos2d
-    system_strings, model_strings = eval(sess,40,batch_size,num_steps,num_classes,methods[1000:1040],comment_array[1000:1040],bodies_array[1000:1040],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,141,batch_size,num_steps,num_classes,methods[1040:1181],comment_array[1040:1181],bodies_array[1040:1181],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-        Activiti
-    system_strings, model_strings = eval(sess,131,batch_size,num_steps,num_classes,methods[940:1071],comment_array[940:1071],bodies_array[940:1071],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,40,batch_size,num_steps,num_classes,methods[900:940],comment_array[900:940],bodies_array[900:940],g,indexToWord,wordToIndex,para)
-    '''
-
-
-    '''
-        neo4j
-    system_strings, model_strings = eval(sess,40,batch_size,num_steps,num_classes,methods[1000:1040],comment_array[1000:1040],bodies_array[1000:1040],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,157,batch_size,num_steps,num_classes,methods[1040:1197],comment_array[1040:1197],bodies_array[1040:1197],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	libgdx
-    system_strings, model_strings = eval(sess,50,batch_size,num_steps,num_classes,methods[2600:2650],comment_array[2600:2650],bodies_array[2600:2650],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,173,batch_size,num_steps,num_classes,methods[2650:2823],comment_array[2650:2823],bodies_array[2650:2823],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	spring-batch
-    system_strings, model_strings = eval(sess,50,batch_size,num_steps,num_classes,methods[1600:1650],comment_array[1600:1650],bodies_array[1600:1650],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,177,batch_size,num_steps,num_classes,methods[1650:1827],comment_array[1650:1827],bodies_array[1650:1827],g,indexToWord,wordToIndex,para)
-    '''
-
-    '''
-	aima
-    system_strings, model_strings = eval(sess,27,batch_size,num_steps,num_classes,methods[1000:1027],comment_array[1000:1027],bodies_array[1000:1027],g,indexToWord,wordToIndex,para)
-    system_strings, model_strings = eval(sess,100,batch_size,num_steps,num_classes,methods[1027:1127],comment_array[1027:1127],bodies_array[1027:1127],g,indexToWord,wordToIndex,para)
-    '''
+    system_strings, model_strings = eval(sess,val_index-train_index,batch_size,num_steps,num_classes,methods[train_index:val_index],comment_array[train_index:val_index],bodies_array[train_index:val_index],g,indexToWord,wordToIndex,para)
 
 
     sess.close()
@@ -267,7 +161,3 @@ def begin_eval(para):
 
     return value,output
 
-if __name__ == '__main__':
-    argvs = argv
-    value,result_info = begin_eval(int(argvs[1]))
-    print result_info

@@ -5,6 +5,7 @@ import timeit
 import random
 import time
 import os
+import sys
 
 import eval
 from CustomRNNCell import CustomRNNCell
@@ -19,7 +20,7 @@ num_classes = 6
 
 ### method 
 call_graph_level = 0
-vector_size = 400
+vector_size = 50
 
 """
 Function to train the network
@@ -88,7 +89,7 @@ def train_network(sess,g,num_epochs, data_size,partial_trees,state_size=4, verbo
             print ('save')
 	    #'''
 
-	accuracy = eval.eval()
+	accuracy = eval.eval('train')
 
     return accuracy
 
@@ -98,13 +99,13 @@ def train():
             print ('X',x)
             print ('Y',y)
 
-def save_data(level_trees,node_type_size,level_width,method_indexes,tree_depth):
+def save_data(folder,level_trees,node_type_size,level_width,method_indexes,tree_depth):
     tree_narray = np.array(level_trees)
-    np.save('./rename_data/level_tree.npy',tree_narray)
+    np.save(folder+'/level_tree.npy',tree_narray)
 
-    np.save('./rename_data/method_indexes.npy',np.array(method_indexes))
+    np.save(folder+'/method_indexes.npy',np.array(method_indexes))
 
-    data_file = open('./rename_data/tree_data.txt','w')
+    data_file = open(folder+'/tree_data.txt','w')
     try:
         data_file.write('%d\n'%node_type_size)
         data_file.write('%d\n'%level_width)
@@ -200,38 +201,9 @@ def load_test_new_data():
 
 if __name__ == '__main__':
 
-#   if tree's depth larger than 9, there are some trees won't be involved
+    not_increase_limit = sys.argv[1]
     if True:
 
-	#print '\033[1;31;40mbegin depth %d\033[0m'%d
-        '''
-    	parseTree, maxLength, parse_tree_depth1, parse_tree_width = partial_tree._read_parse_tree('data/parseTree.txt')
-    	print ('maximum number of nodes',maxLength)
-    	print ('max depth of trees',parse_tree_depth1)
-    	print ('max num of leaf nodes',parse_tree_width)
-    	print 'num of parse trees', len(parseTree)
-
-    	partial_trees,node_type_size,level_width,method_indexes = partial_tree.gen_parse_tree_matrix(parseTree,parse_tree_depth1,parse_tree_width,call_graph_level)
-
-	save_data(partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth1)
-
-    	for step,(partial_trees,node_type_size,level_width,method_indexes) in enumerate(partial_tree.gen_parse_tree_matrix(parseTree,parse_tree_depth1,parse_tree_width,call_graph_level)):
-	    print step,level_width,len(partial_trees)
-#    	partial_trees,node_type_size,level_width,method_indexes = partial_tree.gen_parse_tree_matrix(parseTree,parse_tree_depth1,parse_tree_width,call_graph_level)
-
-	    save_data(partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth1,step)
-    	print 'save successful %d'%d
-
-	which_cluster, cluster_name_to_index  = np.array(partial_tree.gen_raw_method_cluster('./data/methodMap.txt',10194))
-
-	data_file = open('./data/cluster.txt','w')
-	try:
-	    for (name,index) in cluster_name_to_index.items():
-		data_file.write('%s,%d\n'%(name,index))
-	finally:
-	    data_file.close()
-
-        '''
 
         partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = load_data()
 
@@ -272,7 +244,7 @@ if __name__ == '__main__':
                 g['saver'].save(sess,'weight_average/GCD/weight')
                 print ('save')
 
-            if not_increase == 5:
+            if not_increase == not_increase_limit:
                 break
 
         sess.close()

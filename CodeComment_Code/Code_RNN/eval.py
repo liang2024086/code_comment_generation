@@ -20,64 +20,6 @@ num_classes = 6
 call_graph_level = 1
 vector_size = 50
 
-def reset_graph():
-#    if 'sess' in globals() and sess:
-#        sess.close()
-    tf.reset_default_graph()
-
-def build_graph(batch_size, state_size, learning_rate, node_type_size,vector_size,level_max_width,parse_tree_depth):
-
-    reset_graph()
-
-    '''
-    Placeholders
-    '''
-
-    x = tf.placeholder(tf.int32,[batch_size,parse_tree_depth,level_max_width,2], name = 'input_holder')
-#    x = tf.placeholder(tf.int32,[num_steps,batch_size, num_leaf_node,3], name = 'input_holder')
-    x_1 = tf.placeholder(tf.float32,[batch_size,parse_tree_depth,level_max_width], name = 'input_holder')
-    print 'shape of input',x.get_shape()
-
-    y = tf.placeholder(tf.int32,[batch_size], name = 'target_holder')
-
-    with tf.variable_scope('TreeRnn'):
-        '''
-	shape: node_type_size X vector_size X vector_size since there is a matrix for every internal node
-        '''
-#        W_node = tf.get_variable('W_node',[node_type_size,vector_size],initializer=tf.random_uniform_initializer(minval=-1.0,maxval=1.0,seed=random.seed()))
-        W_node = tf.get_variable('W_node',[node_type_size,vector_size],initializer=tf.random_normal_initializer(mean=0.0,stddev=1.0,seed=random.seed()))
-
-        '''
-	weight of parent node and children node
-        '''
-#        W_child = tf.get_variable('W_child',[vector_size,vector_size],initializer=tf.random_uniform_initializer(minval=0.0,maxval=1.0,seed=random.seed()))
-        W_child = tf.get_variable('W_child',[vector_size,vector_size],initializer=tf.random_normal_initializer(mean=0.0,stddev=1.0,seed=random.seed()))
-
-	'''
-        bias of parent node and children node
-        '''
-        b_child = tf.get_variable('b_child',[vector_size],initializer=tf.random_normal_initializer(mean=0.0,stddev=0.1,seed=random.seed()))
-
-    cell = CustomRNNCell(state_size,node_type_size,vector_size,batch_size,parse_tree_depth,level_max_width,W_node,W_child,b_child)
-
-    train_trees = cell.__call__(x,x_1)
-    print 'train trees',train_trees.get_shape()
-
-    _node_rep,_abc_ = cell.get_node_rep()
-    final_tree_vector = cell.get_final_tree_vector()
-
-    with tf.variable_scope('softmax'):
-        W = tf.get_variable('W', [vector_size, num_classes])
-        b = tf.get_variable('b', [num_classes])
-
-    logits = tf.matmul(train_trees,W) + b
-
-    output = tf.nn.softmax(logits)
-    print 'output',output.get_shape()
-
-    return dict(x=x,x_1=x_1,y=y,train_trees=train_trees,saver=tf.train.Saver(),W_node=W_node,W_child=W_child,_node_rep=_node_rep,final_tree_vector=final_tree_vector,_abc_=_abc_,output=output)
-
-
 def eval_network(sess,g,num_epochs, data_size,partial_trees,wether_train,num_methods,state_size=4, verbose=True,save=False,cross_validation_index=0):
 
     if True:
@@ -110,9 +52,14 @@ def eval_network(sess,g,num_epochs, data_size,partial_trees,wether_train,num_met
 
 	return count,result
 
-def eval():
+def eval(type):
 
-    abc = 5
+    if type == 'val':
+        abc = 1
+    elif type == 'train':
+        abc = 0
+    elif type == 'test':
+        abc = 2
 
     if True:
 
@@ -121,13 +68,7 @@ def eval():
 	elif abc == 1:
 	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_val_data()
 	elif abc == 2:
-	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_test_new_data()
-	elif abc == 3:
 	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_test_data()
-	elif abc == 4:
-	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_rename_data()
-	elif abc == 5:
-	    partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth = train.load_before_data()
 
         print 'num of tress',len(partial_trees)
         print 'node type size:',node_type_size
@@ -144,13 +85,7 @@ def eval():
 		elif abc == 0:
 	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=0,num_methods=6648,state_size=state_size,save='weight_average_tmp/GCD/weight',cross_validation_index=i)
 		elif abc == 2:
-	            accuracy, result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=2,num_methods=723,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
-		elif abc == 3:
-	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=3,num_methods=2079,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
-		elif abc == 4:
-	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=4,num_methods=30,state_size=state_size,save='weight_average/GCD/weight',cross_validation_index=i)
-		elif abc == 5:
-	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=5,num_methods=30,state_size=state_size,save='weight_average_old/GCD/weight',cross_validation_index=i)
+	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=2,num_methods=30,state_size=state_size,save='weight_average/GCD/weight',cross_validation_index=i)
 	        accuracy_array.append(accuracy)
 
 		matrix = [ [0 for k in range(6)] for j in range(6)]
@@ -192,18 +127,12 @@ def eval():
             		    p_i[k] = p_i_j  
     
 		member_num = 0 
-		if abc == 3:
-                    member_num = 2079
-                elif abc == 2:
-                    member_num = 723
+                if abc == 2:
+                    member_num = 30
                 elif abc == 1:
                     member_num = 1997
                 elif abc == 0:
                     member_num = 6648
-                elif abc == 4:
-                    member_num = 30
-                elif abc == 5:
-                    member_num = 30
  
 		e = 0  
 		p = 0             
@@ -226,12 +155,9 @@ def eval():
 	    if abc == 1:
                 print 'accuracy',float(num)/1997
                 return float(num) / 1997
-            elif abc == 3:
-                print 'accuracy',float(num)/2079
-                return float(num) / 2079
             elif abc == 2:
-                print 'accuracy',float(num)/723
-                return float(num) / 723
+                print 'accuracy',float(num)/30
+                return float(num) / 30
             elif abc == 0:
                 print 'accuracy',float(num)/6648
                 return float(num) / 6648
@@ -239,4 +165,4 @@ def eval():
 
 if __name__ == '__main__':
 
-    eval()
+    eval('test')

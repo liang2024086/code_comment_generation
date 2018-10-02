@@ -1,1 +1,0 @@
-returns the given list of the server

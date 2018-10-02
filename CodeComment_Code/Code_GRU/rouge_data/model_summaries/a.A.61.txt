@@ -1,1 +1,0 @@
-returns the notification that the room has been destroyed after a room has been destroyed the room occupants will receive a presence stanza packet of type unavailable with the reason for the room destruction if provided by the room owner

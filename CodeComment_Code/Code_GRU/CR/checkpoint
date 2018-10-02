@@ -1,3 +1,0 @@
-model_checkpoint_path: "weight"
-all_model_checkpoint_paths: "../CR_temp/weight"
-all_model_checkpoint_paths: "weight"

@@ -1,1 +1,0 @@
-returns true if the queue is currently shut down

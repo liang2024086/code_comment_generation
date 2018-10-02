@@ -1,1 +1,0 @@
-get the session id of the stanza packet usually same as jingle session id

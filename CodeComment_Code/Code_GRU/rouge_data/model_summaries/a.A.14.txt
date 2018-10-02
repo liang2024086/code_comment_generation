@@ -1,1 +1,0 @@
-if automatic join on reconnect is enabled then the manager will try to auto join muc rooms after the connection got re established

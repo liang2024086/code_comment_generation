@@ -1,1 +1,0 @@
-answer an xml representation of the receiver according to the rfc UNK UNK

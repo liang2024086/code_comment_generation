@@ -61,12 +61,11 @@ def _read_parse_tree(fileName,wether_comment=0):
             if newNums[4] > maxLevel:
                 maxLevel = newNums[4]
  	    if newNums[4] > 80 and judge:
-		print 'GOOD',methodIndex
 		depth_count += 1
 		judge = False
             node.append(newNums)
 
-    print 'depth count',depth_count
+    #print 'depth count',depth_count
 
     if wether_comment == 1:
         if methodIndex in methodComments:
@@ -469,14 +468,15 @@ def gen_raw_method_cluster(file_name,method_nums):
             count += 1
 
 
-#    print name_to_index
     '''
+    print "cluster data train"
+    print name_to_index
     print class_names
     print index_to_name
     print clusters
     print which_clusters
-
     '''
+
     abcdeft = {}
 #    print len(class_names)
     for (a,b) in class_names.items():
@@ -525,14 +525,14 @@ def gen_test_method_cluster(file_name,method_nums):
         if clusters.has_key(name):
             which_clusters[method_index-1] = clusters[name]
         else:
-	    print 'wrong'
             which_clusters[method_index-1] = 0
 
     '''
+    print 'cluster data:'
     print clusters
     print which_clusters
-
     '''
+
 
     return which_clusters
 
@@ -549,13 +549,9 @@ def gen_epochs(n,batch_size,partial_trees,wether_train,cross_validation_index,nu
     elif wether_train == 1:
         which_cluster = np.array(gen_test_method_cluster('./val_data/methodMap.txt',num_methods))
     elif wether_train == 2:
-        which_cluster = np.array(gen_test_method_cluster('./test_new_data/methodMap.txt',num_methods))
-    elif wether_train == 3:
         which_cluster = np.array(gen_test_method_cluster('./test_data/methodMap.txt',num_methods))
-    elif wether_train == 4:
-        which_cluster = np.array(gen_test_method_cluster('./rename_data/methodMap.txt',num_methods))
-    elif wether_train == 5:
-        which_cluster = np.array(gen_test_method_cluster('./before_rename_data/methodMap.txt',num_methods))
+    elif wether_train == 3:
+        which_cluster = np.array(gen_test_method_cluster('./comment_data/methodMap.txt',num_methods))
 
     a0 = np.where(which_cluster == 0)[0]
     a1 = np.where(which_cluster == 1)[0]
@@ -615,118 +611,10 @@ def gen_epochs(n,batch_size,partial_trees,wether_train,cross_validation_index,nu
     partial_trees = partial_trees[c[1:]]
     which_cluster = which_cluster[c[1:]]
 
-    '''
-    if wether_train:
-	if cross_validation_index == 0:
-    	    input_trees = partial_trees[0:90]
-    	    input_which_cluster = which_cluster[0:90]
-	elif cross_validation_index == 1:
-    	    input_trees = partial_trees[10:100]
-    	    input_which_cluster = which_cluster[10:100]
-	elif cross_validation_index == 2:
-    	    input_trees = np.append(partial_trees[20:100],partial_trees[0:10],0)
-    	    input_which_cluster = np.append(which_cluster[20:100],which_cluster[0:10],0)
-	elif cross_validation_index == 3:
-    	    input_trees = np.append(partial_trees[30:100],partial_trees[0:20],0)
-    	    input_which_cluster = np.append(which_cluster[30:100],which_cluster[0:20],0)
-	elif cross_validation_index == 4:
-    	    input_trees = np.append(partial_trees[40:100],partial_trees[0:30],0)
-    	    input_which_cluster = np.append(which_cluster[40:100],which_cluster[0:30],0)
-	elif cross_validation_index == 5:
-    	    input_trees = np.append(partial_trees[50:100],partial_trees[0:40],0)
-    	    input_which_cluster = np.append(which_cluster[50:100],which_cluster[0:40],0)
-	elif cross_validation_index == 6:
-    	    input_trees = np.append(partial_trees[60:100],partial_trees[0:50],0)
-    	    input_which_cluster = np.append(which_cluster[60:100],which_cluster[0:50],0)
-	elif cross_validation_index == 7:
-    	    input_trees = np.append(partial_trees[70:100],partial_trees[0:60],0)
-    	    input_which_cluster = np.append(which_cluster[70:100],which_cluster[0:60],0)
-	elif cross_validation_index == 8:
-    	    input_trees = np.append(partial_trees[80:100],partial_trees[0:70],0)
-    	    input_which_cluster = np.append(which_cluster[80:100],which_cluster[0:70],0)
-	elif cross_validation_index == 9:
-    	    input_trees = np.append(partial_trees[90:100],partial_trees[0:80],0)
-    	    input_which_cluster = np.append(which_cluster[90:100],which_cluster[0:80],0)
-    else:
-	if cross_validation_index == 0:
-    	    input_trees = partial_trees[90:100]
-    	    input_which_cluster = which_cluster[90:100]
-	elif cross_validation_index == 1:
-    	    input_trees = partial_trees[0:10]
-    	    input_which_cluster = which_cluster[0:10]
-	elif cross_validation_index == 2:
-    	    input_trees = partial_trees[10:20]
-    	    input_which_cluster = which_cluster[10:20]
-	elif cross_validation_index == 3:
-    	    input_trees = partial_trees[20:30]
-    	    input_which_cluster = which_cluster[20:30]
-	elif cross_validation_index == 4:
-    	    input_trees = partial_trees[30:40]
-    	    input_which_cluster = which_cluster[30:40]
-	elif cross_validation_index == 5:
-    	    input_trees = partial_trees[40:50]
-    	    input_which_cluster = which_cluster[40:50]
-	elif cross_validation_index == 6:
-    	    input_trees = partial_trees[50:60]
-    	    input_which_cluster = which_cluster[50:60]
-	elif cross_validation_index == 7:
-    	    input_trees = partial_trees[60:70]
-    	    input_which_cluster = which_cluster[60:70]
-	elif cross_validation_index == 8:
-    	    input_trees = partial_trees[70:80]
-    	    input_which_cluster = which_cluster[70:80]
-	elif cross_validation_index == 9:
-    	    input_trees = partial_trees[80:90]
-    	    input_which_cluster = which_cluster[80:90]
-
-#    print input_trees.shape,input_num_sub_trees.shape,input_which_cluster.shape,type(input_trees),type(input_num_sub_trees),type(input_which_cluster)
-    '''
     input_trees = partial_trees
     input_which_cluster = which_cluster
     for i in range(n):
         yield gen_batch(batch_size,input_trees,np.array(input_which_cluster))
         #yield gen_batch(methodComments,batch_size,indexToWord,maxLength,partial_trees)
-
-if __name__ == '__main__':
-
-#    which_cluster. cluster_name_to_Index = gen_raw_method_cluster('./data/methodMap.txt',27233)
-#    print which_cluster
-
-    '''
-    parseTree, maxLength, parse_tree_depth1, parse_tree_width = _read_parse_tree('rename_data/parseTree.txt')
-    print ('maximum number of nodes',maxLength)
-    print ('max depth of trees',parse_tree_depth1)
-    print ('max num of leaf nodes',parse_tree_width)
-    print 'num of parse trees', len(parseTree)
-
-    partial_trees,node_type_size,level_width,method_indexes = gen_parse_tree_matrix(parseTree,parse_tree_depth1,parse_tree_width,0)
-
-    print 'num of tress',len(partial_trees)
-    print 'node type size:',node_type_size
-    print 'max width of every level:',level_width
-
-    train.save_data(partial_trees,node_type_size,level_width,method_indexes,parse_tree_depth1)
-
-
-#    cluster = _read_cluster('./data/cluster.txt')
-#    print cluster
-
-#    gen_test_method_cluster('./test_new_data/methodMap.txt',723)
-    '''
-
-#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./before_rename_data/methodMap.txt',30))
-#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./rename_data/methodMap.txt',30))
-    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./test_new_data/methodMap.txt',723))
-#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./test_data/methodMap.txt',2079))
-#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./val_data/methodMap.txt',1997))
-#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./all_data/methodMap.txt',27233))
-#    which_cluster, cluster_name_to_index  = np.array(gen_raw_method_cluster('./data/methodMap.txt',6648))
-
-    data_file = open('./data/cluster.txt','w')
-    try:
-        for (name,index) in cluster_name_to_index.items():
-            data_file.write('%s,%d\n'%(name,index))
-    finally:
-        data_file.close()
 
 

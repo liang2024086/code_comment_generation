@@ -1,1 +1,0 @@
-returns the bare jid of the affiliated user this information will always be available

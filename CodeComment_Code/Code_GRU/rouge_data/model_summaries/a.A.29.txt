@@ -1,1 +1,0 @@
-returns the status message of the last unavailable presence received from the user

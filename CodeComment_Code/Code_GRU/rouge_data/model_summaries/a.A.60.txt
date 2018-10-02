@@ -1,1 +1,0 @@
-returns the configured hostnameverifier of this connectionconfiguration or the smack default hostnameverifier configured with link UNK UNK hostnameverifier

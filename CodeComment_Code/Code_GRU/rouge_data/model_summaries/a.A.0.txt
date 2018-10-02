@@ -1,1 +1,0 @@
-test the output stream write byte int int method

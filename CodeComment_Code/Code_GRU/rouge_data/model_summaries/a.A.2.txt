@@ -1,1 +1,0 @@
-adds a listener that will be notified of changes in your status in the room such as the user being kicked banned or granted admin permissions

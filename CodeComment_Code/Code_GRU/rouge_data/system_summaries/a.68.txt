@@ -1,1 +1,0 @@
-returns the UNK of the given of the room

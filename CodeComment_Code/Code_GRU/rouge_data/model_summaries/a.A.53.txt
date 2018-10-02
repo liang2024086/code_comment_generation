@@ -1,1 +1,0 @@
-returns the roster subscription type of the entry when the type is UNK UNK none or UNK UNK from UNK to link UNK getstatus to see if a subscription request is pending

@@ -1,1 +1,0 @@
-sets the since date to use to filter the messages received during that time in other words only the messages received since the UNK specified will be included in the history

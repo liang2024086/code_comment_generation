@@ -1,1 +1,0 @@
-creates the main debug window that provides information about smack and also shows a UNK UNK for each connection that is being debugged

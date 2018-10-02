@@ -1,1 +1,0 @@
-set if stream management resumption should be used by default for new connections

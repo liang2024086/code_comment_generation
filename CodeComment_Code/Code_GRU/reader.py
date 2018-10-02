@@ -6,34 +6,6 @@ import test
 
 max_children_size = 100000
 
-def gen_body_array(repo_name):
-
-    directory = '/home/yuding/workspace/RepoComment/CommentRNN/gen_vector/repo_%s'%repo_name
-    #directory = '/home/yuding/workspace/BodySeq2Seq/data/repo_%s'%repo_name
-    
-    wordToIndex, indexToWord = _read_comments_word('./buildData/body_words/repo_%s/bodyWordMap.txt'%repo_name)
-    methodBodies, max_length = _read_comments(directory+'/methodBodyMap.txt',wordToIndex)
-
-    comment_index = np.load('/home/yuding/workspace/RepoComment/CommentRNN/gen_vector/method_vector/methods_%s_indexes.npy'%repo_name)
-    #comment_index = np.load('/home/yuding/workspace/RepoComment/CommentRNNCallGraph/comment_%s_data/comment_index.npy'%repo_name)
-
-    bodies = []
-
-    _max_length = 100
-
-    for index in comment_index:
-	body_words = methodBodies['%d'%index]
-	new_bodies = []
-	for i in range(_max_length):
-	    if i < len(body_words):
-		new_bodies.append(int(body_words[i]))
-	    else:
-		new_bodies.append(-1)
-	bodies.append(new_bodies)
-
-    print np.array(bodies).shape
-    np.save('./body/body_%s/bodies_array.npy'%repo_name,np.array(bodies))
-
 def save_data(partial_trees,node_type_size,level_width,max_num_sub_tree,num_sub_trees,method_indexes,repo_name):
     tree_narray = np.array(partial_trees)
     np.save('./output_%s/partial_tree.npy'%repo_name,tree_narray)
@@ -677,18 +649,4 @@ def gen_eval_epoch(n,batch_size,num_steps,method_vectors,method_comments,bodies_
 	#yield gen_eval_batch(batch_size,num_steps,method_vectors,method_comments,i)
 	yield method_vectors[i*batch_size:(i+1)*batch_size],bodies_array[i*batch_size:(i+1)*batch_size]
 
-if __name__ == '__main__':
 
-    '''
-    parseTree, maxLength, parse_tree_depth1, parse_tree_width = _read_parse_tree('repo_data/parseTree.txt')
-    print ('maximum number of nodes',maxLength)
-    print ('max depth of trees',parse_tree_depth1)
-    print ('max num of leaf nodes',parse_tree_width)
-    print 'num of parse trees', len(parseTree)
-
-    print parseTree
-
-    partial_trees,node_type_size,level_width,max_num_sub_tree,num_sub_trees,method_indexes = gen_parse_tree_matrix(parseTree,5,parse_tree_width,1)
-    '''
-
-    gen_body_array('Smack')

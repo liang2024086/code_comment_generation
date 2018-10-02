@@ -1,1 +1,0 @@
-returns the xml namespace of the private data sub packet root element
