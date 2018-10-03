@@ -64,11 +64,6 @@ cd Code_GRU
 if [ ! -d "data/" ]; then
     mkdir data
 fi
-echo "generate body word"
-python gen_body_word_with_unk.py
-echo "generate comment word"
-python gen_comment_word_with_unk.py
-python gen_comment_data.py ${REPO}
 
 echo "prepare for calculating ROUGE-2 value"
 if [ ! -d "rouge_data/" ]; then
@@ -80,6 +75,13 @@ fi
 if [ ! -d "rouge_data/system_summaries" ]; then
     mkdir rouge_data/system_summaries
 fi
+
+echo "generate body word"
+python gen_body_word_with_unk.py
+echo "generate comment word"
+python gen_comment_word_with_unk.py
+python gen_comment_data.py ${REPO}
+
 rm -rf rouge_data/model_summaries/*
 rm -rf rouge_data/system_summaries/*
 
