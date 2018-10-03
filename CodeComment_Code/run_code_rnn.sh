@@ -68,8 +68,8 @@ if [ ! -d "test_data/" ]; then
 fi
 cp ../GetParseTree/output/* test_data/
 python gen_data.py test
-echo "-- begin to test"
-python eval.py
+#echo "-- begin to test"
+#python eval.py
 cd ..
 
 
