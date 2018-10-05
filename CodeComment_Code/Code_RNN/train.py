@@ -39,6 +39,7 @@ def train_network(sess,g,num_epochs, data_size,partial_trees,state_size=4, verbo
 
             epoch_loss = 0
 	    epoch_count = 0
+            l2_loss = 0
 
             time_start = time.time()
 
@@ -47,10 +48,11 @@ def train_network(sess,g,num_epochs, data_size,partial_trees,state_size=4, verbo
             for step, (X,X_1, tree_label) in enumerate(epoch):
 		
 		#training_loss_,W_node,W_child,final_tree_vector,train_trees = sess.run([g['total_loss'],g['W_node'],g['W_child'],g['final_tree_vector'],g['train_trees']],feed_dict={g['x']:X,g['x_1']:X_1,g['x_num_sub_trees']:X_num_sub_trees,g['y']:tree_label})
-		training_loss_,train_step,W_node,W_child,final_tree_vector,train_trees = sess.run([g['total_loss'],g['train_step'],g['W_node'],g['W_child'],g['final_tree_vector'],g['train_trees']],feed_dict={g['x']:X,g['x_1']:X_1,g['y']:tree_label})
+		_l2_loss,training_loss_,train_step,W_node,W_child,final_tree_vector,train_trees = sess.run([g['l2'],g['total_loss'],g['train_step'],g['W_node'],g['W_child'],g['final_tree_vector'],g['train_trees']],feed_dict={g['x']:X,g['x_1']:X_1,g['y']:tree_label})
 		
                 training_loss += training_loss_
 		epoch_loss += training_loss_
+                l2_loss += _l2_loss
 		epoch_count += 1
                 time_end = time.time()
 		'''
@@ -85,6 +87,7 @@ def train_network(sess,g,num_epochs, data_size,partial_trees,state_size=4, verbo
 	    '''
             print 'time',time_end-time_start,'s'
             print 'epoch loss:',epoch_loss/epoch_count
+            print 'l2 loss:',l2_loss/epoch_count
             g['saver'].save(sess,'weight_average_tmp/GCD/weight')
             print ('save')
 	    #'''

@@ -76,13 +76,14 @@ def build_graph(batch_size, state_size, learning_rate, node_type_size,vector_siz
 
     output = tf.nn.softmax(logits)
 
-    total_loss = tf.reduce_sum(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y,logits=logits))
+    l2_loss = tf.nn.l2_loss(W_node) + tf.nn.l2_loss(W_child)#0.001 * l2_loss +
+    total_loss =  tf.reduce_sum(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y,logits=logits))
     #print 'loss',total_loss.get_shape()
 
 
     train_step = tf.train.AdagradOptimizer(learning_rate).minimize(total_loss)
 
-    return dict(x=x,x_1=x_1,y=y,train_trees=train_trees,total_loss=total_loss,train_step=train_step,saver=tf.train.Saver(),W_node=W_node,W_child=W_child,_node_rep=_node_rep,final_tree_vector=final_tree_vector,_abc_=_abc_,output=output)
+    return dict(x=x,x_1=x_1,y=y,train_trees=train_trees,total_loss=total_loss,train_step=train_step,saver=tf.train.Saver(),W_node=W_node,W_child=W_child,_node_rep=_node_rep,final_tree_vector=final_tree_vector,_abc_=_abc_,output=output,l2=l2_loss)
 
 def generate_text(g,checkpoint,num_words,prompt=23,pick_top_words=None):
 

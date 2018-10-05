@@ -91,7 +91,7 @@ if __name__ == '__main__':
 	sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options,intra_op_parallelism_threads=8))
 
 	# initialize
-        g['saver'].restore(sess,'weight_average/GCD/weight')
+        g['saver'].restore(sess,'weight_average_old/GCD/weight')
 
     	count = 0
     	if True:

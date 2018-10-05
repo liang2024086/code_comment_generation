@@ -14,20 +14,21 @@ if __name__ == '__main__':
         folder = 'data'
     elif sys.argv[1] == 'test':
         folder = 'test_data'
-    elif sys.argv[1] == 'val':
-        folder = 'val_data'
     elif sys.argv[1] == 'comment':
         folder = 'comment_data'
+    elif sys.argv[1] == 'val':
+        folder = 'val_data'
 
+    print "type: ", folder
     print "load parse tree"
-    parseTree, maxLength, parse_tree_depth1, parse_tree_width = _read_parse_tree(folder+'/parseTree.txt')
+    parseTree, maxLength, parse_tree_depth1, parse_tree_width = _read_parse_tree(folder+'/parseTree.txt',folder)
     #print ('maximum number of nodes',maxLength)
     #print ('max depth of trees',parse_tree_depth1)
     #print ('max num of leaf nodes',parse_tree_width)
     #print 'num of parse trees', len(parseTree)
 
     print "tranfer parse tree to matirx"
-    partial_trees,node_type_size,level_width,method_indexes = gen_parse_tree_matrix(parseTree,parse_tree_depth1,parse_tree_width,0)
+    partial_trees,node_type_size,level_width,method_indexes = gen_parse_tree_matrix(folder,parseTree,parse_tree_depth1,parse_tree_width,0)
 
     #print 'num of tress',len(partial_trees)
     #print 'node type size:',node_type_size

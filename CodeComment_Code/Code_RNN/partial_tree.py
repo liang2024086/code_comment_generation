@@ -17,7 +17,7 @@ def _read_lines(fileName):
     with tf.gfile.GFile(fileName,'r') as f:
         return f.readlines()
 
-def _read_parse_tree(fileName,wether_comment=0):
+def _read_parse_tree(fileName,folder,wether_comment=0):
     parseTree = {}
     maxLength = 0
     maxLevel = 0
@@ -29,8 +29,8 @@ def _read_parse_tree(fileName,wether_comment=0):
     widthCount = 0
 
     if wether_comment == 1:
-        wordToIndex, indexToWord = _read_comments_word('data/commentWordMap.txt')
-        methodComments,maxLength = _read_comments('data/methodCommentMap.txt',wordToIndex)
+        wordToIndex, indexToWord = _read_comments_word(folder+'/commentWordMap.txt')
+        methodComments,maxLength = _read_comments(folder+'/methodCommentMap.txt',wordToIndex)
 
     judge = False
     depth_count = 0
@@ -84,6 +84,15 @@ def _read_inter_type(fileName):
 
     return inter_type
 
+def _read_inter_type_index(fileName):
+    inter_type = {}
+    lines = _read_lines(fileName)
+    for i in range(0,len(lines)):
+        line = lines[i].replace(' ','').replace('\n','').split(',')
+        inter_type[int(line[0])] = line[1]
+
+    return inter_type
+
 def _read_identifier(fileName):
     vocabulary = {}
     lines = _read_lines(fileName)
@@ -91,6 +100,15 @@ def _read_identifier(fileName):
         line = lines[i].split(',')
         vocabulary[line[1]] = int(line[0])
 #	vocabulary[int(line[0])] = line[1]
+    return vocabulary
+
+def _read_identifier_index(fileName):
+    vocabulary = {}
+    lines = _read_lines(fileName)
+    for i in range(0,len(lines)):
+        line = lines[i].split(',')
+#        vocabulary[line[1]] = int(line[0])
+	vocabulary[int(line[0])] = line[1]
     return vocabulary
 
 def _read_method_map(fileName):
@@ -125,7 +143,7 @@ def split_method_name(methodName):
         names.append(name.lower())
     return names
 
-def gen_parse_tree_matrix(parseTree,parse_tree_depth,parse_tree_width,call_graph_level):
+def gen_parse_tree_matrix(folder,parseTree,parse_tree_depth,parse_tree_width,call_graph_level):
 
 
     copy_parse_tree = deepcopy(parseTree)
@@ -140,7 +158,7 @@ def gen_parse_tree_matrix(parseTree,parse_tree_depth,parse_tree_width,call_graph
 
     print 'expand parse tree',len(expand_parse_tree)
 
-    convert_parse_tree,vocab_size,inter_type_size = convert_method2method_name(expand_parse_tree)
+    convert_parse_tree,vocab_size,inter_type_size = convert_method2method_name(expand_parse_tree,folder)
 
     print 'convert parse tree',len(convert_parse_tree)
 
@@ -283,25 +301,29 @@ def split_tree_to_leaf_inter(parse_tree):
 
     return leaf_node,inter_node
 
-def convert_method2method_name(parse_trees):
+def convert_method2method_name(parse_trees,folder):
 
     new_tree = deepcopy(parse_trees)
 
     vocabulary =_read_identifier('./data/vocabularyMap.txt')
+    vocabulary_index =_read_identifier_index('./'+folder+'/vocabularyMap.txt')
     inter_type = _read_inter_type('./data/interMap.txt')
-    method_index2name_map = _read_method_map('./data/methodMap.txt')
+    inter_type_index = _read_inter_type_index('./'+folder+'/interMap.txt')
+    method_index2name_map = _read_method_map('./'+folder+'/methodMap.txt')
 
     vocab_size = len(vocabulary)
     inter_type_size = len(inter_type)
 
     for (methodIndex, tree) in new_tree.items():
+        length = len(tree)
+        _l = 0
         for node in tree:
-            if node[3] > max_children_size:
-		del new_tree[methodIndex]
-		break
-            if node[3] > 0:
-                node[2] += vocab_size
+            _l = _l + 1
+            if _l > length:
+                break
+            judge = True
             if node[2] < 0:
+                judge = False
                 name_index = -node[2]
                 new_names = split_method_name(method_index2name_map[name_index])
                 node_index = len(tree)
@@ -313,6 +335,20 @@ def convert_method2method_name(parse_trees):
                         tree.append([node_index+i,node[0],vocabulary[new_names[i]],0,node[4]+1])
                     else:
                         tree.append([node_index+i,node[0],vocabulary['UNK'],0,node[4]+1])
+            if node[3] > max_children_size:
+		del new_tree[methodIndex]
+		break
+            if node[3] > 0:
+                if inter_type_index[node[2]] in inter_type:
+                    node[2] = inter_type[inter_type_index[node[2]]]
+                else:
+                    node[2] = inter_type['UNK']
+                node[2] += vocab_size
+            elif node[3] == 0 and judge:
+                if vocabulary_index[node[2]] in vocabulary:
+                    node[2] = vocabulary[vocabulary_index[node[2]]]
+                else:
+                    node[2] = vocabulary['UNK']
 
     return new_tree,len(vocabulary),len(inter_type)
 
@@ -546,6 +582,8 @@ def gen_epochs(n,batch_size,partial_trees,wether_train,cross_validation_index,nu
     if wether_train == 0:
         which_cluster, cluster_name_to_index  = gen_raw_method_cluster('./data/methodMap.txt',num_methods)
 	which_cluster = np.array(which_cluster)
+    elif wether_train == 1:
+        which_cluster = np.array(gen_test_method_cluster('./val_data/methodMap.txt',num_methods))
     elif wether_train == 2:
         which_cluster = np.array(gen_test_method_cluster('./test_data/methodMap.txt',num_methods))
     elif wether_train == 3:

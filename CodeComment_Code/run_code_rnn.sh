@@ -27,6 +27,7 @@ genData(){
     echo ""
     echo "begin to generate parse tree"
     cd GetParseTree
+    echo repoNames=${REPO} > param.properties
     if [ ! -d "data/" ]; then
         mkdir data
     fi

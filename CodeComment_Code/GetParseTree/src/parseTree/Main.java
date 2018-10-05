@@ -32,18 +32,17 @@ public class Main{
 
 	public static void main(String args[]) throws IOException{
 
-		/*Properties props = new Properties();
+		Properties props = new Properties();
 		props.load(new FileInputStream("param.properties"));
 		String param1 = props.getProperty("repoNames");
 		names = param1.split(",");
-		*/
-		names = args;
 		
+
 		Bmcl.vocabulary = new Vocabulary(Bmcl.dim);
 		Bmcl.codeFW = new FileWriter("./output/parseTree.txt");
 		Bmcl.codePW = new PrintWriter(Bmcl.codeFW);
 
-//System.out.println("Arg comment: " + Bmcl.comment);
+System.out.println("Arg comment: " + Bmcl.comment);
 
 		try{
 
@@ -58,11 +57,11 @@ public class Main{
 			PrintWriter pw = new PrintWriter(fw);
 
 			for (int i = 0; i < names.length; ++i){
-		//System.out.println("handle " + names[i]);
+		System.out.println("handle " + names[i]);
 				String repoFile = "./data/"+names[i]+"JavaFile.txt";
 				ThroughOneRepo throughOneRepo = new ThroughOneRepo(repoFile,pw);
 				num += throughOneRepo.extractComments();
-		//System.out.println("");
+		System.out.println("");
 			}
 
 			pw.close();
@@ -70,7 +69,7 @@ public class Main{
 			e.printStackTrace();
 		}
 
-		//System.out.println("number of comments:" + num);
+		System.out.println("number of comments:" + num);
 
 // generate functionIndexToName and functionNameToIndex
 		Bmcl.indexFunction();
@@ -88,7 +87,7 @@ public class Main{
 
 		Bmcl.vocabulary.codeWordFilter();
 
-		//System.out.println("begin to write vocabulary");
+		System.out.println("begin to write vocabulary");
 		HashMap<Integer, String> codeIndexToWord = Bmcl.vocabulary.getCodeIndexToWord();
 		HashMap<Integer, Integer> codeWordNums = Bmcl.vocabulary.getCodeWordNums();
 		FileWriter vocabFW = new FileWriter("./output/vocabularyMap.txt");
@@ -96,15 +95,14 @@ public class Main{
 
 		for (Entry<Integer, String> en : codeIndexToWord.entrySet()){
 //			    vocabPW.println(en.getKey() + "," + en.getValue()+ "," + codeWordNums.get(en.getKey()));
-                        if (en.getValue() != null)
-			    vocabPW.println(en.getKey() + "," + en.getValue().replace("\n"," ")+ "," + codeWordNums.get(en.getKey()));
+			    vocabPW.println(en.getKey() + "," + en.getValue().replace("\n","")+ "," + codeWordNums.get(en.getKey()));
 		}
 
 		vocabPW.close();
-		//System.out.println("size of vocabulary: " + Bmcl.vocabulary.getCodeWordToIndex().size());
+		System.out.println("size of vocabulary: " + Bmcl.vocabulary.getCodeWordToIndex().size());
 
 //---------------------------------inter node---------------------------------
-		//System.out.println("begin to write internode map");
+		System.out.println("begin to write internode map");
 		HashMap<Integer,String> interNodeToName = Bmcl.vocabulary.getInterNodeToName();
 		FileWriter interFW = new FileWriter("./output/interMap.txt");
 		PrintWriter interPW = new PrintWriter(interFW);
@@ -112,12 +110,13 @@ public class Main{
 		for (Entry<Integer, String> en : interNodeToName.entrySet()){
 		    interPW.println(en.getKey() + " , " + en.getValue());
 		}
+                interPW.println(interNodeToName.size() + " , " + "UNK");
 		interPW.close();
 
-		//System.out.println("size of inter node type: " + interNodeToName.size());
+		System.out.println("size of inter node type: " + interNodeToName.size());
 
 //--------------------------------Method Map------------------------------------------------------------
-		//System.out.println("begin to write method map");
+		System.out.println("begin to write method map");
 		
 		FileWriter parseFW = new FileWriter("./output/methodMap.txt");
 		PrintWriter parsePW = new PrintWriter(parseFW);
@@ -130,7 +129,7 @@ public class Main{
 
 //--------------------------------Parse Tree------------------------------------------------------------
 
-		//System.out.println("begin to write parse tree");
+		System.out.println("begin to write parse tree");
 //		System.out.print("progress: ");
 		int count = 0;
 		int numOfMethod = 0;
@@ -166,7 +165,7 @@ public class Main{
 
 //-------------------------------Method Comment Map-----------------------------------------------------
 
-		//System.out.println("begin to write method comment map");
+		System.out.println("begin to write method comment map");
 		
 		FileWriter mcFW = new FileWriter("./output/methodCommentMap.txt");
 		PrintWriter mcPW = new PrintWriter(mcFW);
@@ -182,13 +181,21 @@ public class Main{
 
 //--------------------------------------End-------------------------------------------------------------
 
+		System.out.println(" true " + Bmcl.abc1);
+		System.out.println(" false " + Bmcl.abc2);
+		System.out.println(" equal " + Bmcl.abc3);
+
 		getMethodsBody();
+		getMethodsFullBody();
 	}
 
 	static void getMethodsBody(){
 	    try{
 	    FileWriter mbFW = new FileWriter("./output/methodBodyMap.txt");
 	    PrintWriter mbPW = new PrintWriter(mbFW);
+
+	    FileWriter mbOriFW = new FileWriter("./output/methodOriBodyMap.txt");
+	    PrintWriter mbOriPW = new PrintWriter(mbOriFW);
 
 	    for (Entry<String,String> en : Bmcl.methodBodyMap.entrySet()){
 		String body = en.getValue().replace("{"," ").replace("\n"," ").replace("\""," ").replace("}"," ").replace("("," ").replace(")"," ").replace(";"," ").replace("."," ").replace(","," ").replace("\'"," ").replace("\\"," ").replace("|"," ").replace("!"," ").replace("&"," ").replace("\t"," ").replace("["," ").replace("]"," ").replace("<"," ").replace("="," ").replace(">"," ").replace(":"," ").replace("?", " ").replace("/"," ").replace("%"," ").replace("+"," ").replace("_"," ").replace("-"," ").replace("*"," ").replace("#"," ").replace("@"," ").replace("^"," ");
@@ -215,10 +222,35 @@ public class Main{
 //		if (!oneBodyWords.equals("")){
 		    if (Bmcl.functionNameToIndex.containsKey(en.getKey())){
 			mbPW.println(Bmcl.functionNameToIndex.get(en.getKey())+" ,"+oneBodyWords);
+			mbOriPW.println(Bmcl.functionNameToIndex.get(en.getKey())+" ,"+en.getValue().replace("\n"," ").replace("\t"," "));
 		    }
 //		}
 	    }
-	    //System.out.println(Bmcl.methodBodyMap.size());
+	    System.out.println(Bmcl.methodBodyMap.size());
+
+	    mbPW.close();
+	    mbOriPW.close();
+	    }catch(Exception e){
+		e.printStackTrace();
+	    }
+
+	}
+
+	static void getMethodsFullBody(){
+	    try{
+	    FileWriter mbFW = new FileWriter("./output/methodFullBodyMap.txt");
+	    PrintWriter mbPW = new PrintWriter(mbFW);
+
+	    for (Entry<String,String> en : Bmcl.methodBodyMap.entrySet()){
+//		String body = en.getValue().replace("{"," ").replace("\n"," ").replace("\""," ").replace("}"," ").replace("("," ").replace(")"," ").replace(";"," ").replace("."," ").replace(","," ").replace("\'"," ").replace("\\"," ").replace("|"," ").replace("!"," ").replace("&"," ").replace("\t"," ").replace("["," ").replace("]"," ").replace("<"," ").replace("="," ").replace(">"," ").replace(":"," ").replace("?", " ").replace("/"," ").replace("%"," ").replace("+"," ").replace("_"," ").replace("-"," ").replace("*"," ").replace("#"," ").replace("@"," ").replace("^"," ");
+
+		String body = en.getValue().replace("\t"," ").replace("\n"," ");
+
+		    if (Bmcl.functionNameToIndex.containsKey(en.getKey())){
+			mbPW.println(Bmcl.functionNameToIndex.get(en.getKey())+" ,"+body);
+		    }
+	    }
+	    System.out.println(Bmcl.methodBodyMap.size());
 
 	    mbPW.close();
 	    }catch(Exception e){
@@ -226,5 +258,4 @@ public class Main{
 	    }
 
 	}
-
 }

@@ -197,7 +197,7 @@ else Bmcl.abc2++;
 		}else if(node.getChildren().size() > 0){
 		    Bmcl.vocabulary.addInterNodeWord(node.getValue());
 		}
-		else{
+		else if (node.getValue() != null){
 		  Bmcl.vocabulary.addCode(node.getValue());
 		}
 		

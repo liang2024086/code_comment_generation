@@ -166,11 +166,12 @@ System.out.println("Comment " + commentNum + " " + usefulCommentNum);
 		String postFix = "CallGraphMap.txt";
 		String outputPostFix = "FunctionWords.txt";
 
-		/*Properties props = new Properties();
+		
+		Properties props = new Properties();
 		props.load(new FileInputStream("param.properties"));
 		String param1 = props.getProperty("repoNames");
-		names = param1.split(",");*/
-		names = Main.names;
+		names = param1.split(",");
+		
 		//XML
                 Document doc = DocumentHelper.createDocument();
                 Element methods = doc.addElement("methods");
