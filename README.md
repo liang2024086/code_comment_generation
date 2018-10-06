@@ -17,7 +17,7 @@ You can change the command in the file run.sh to run different data set.
 ```
 CodeComment_Code/run_code_rnn.sh {MAX_TERMINATE_ITERATION_NUMBERS_OF_NOT_INCREASE}
 ```
-For example, if we want to terminate the training process when the results of validation sets is not increaseed in five steps, we can write the command as:
+For example, if we want to terminate the training process when the results of validation sets is not increased in five steps, we can write the command as:
 ```
 CodeComment_Code/run_code_rnn.sh 5
 ```
