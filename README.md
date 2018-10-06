@@ -1,8 +1,9 @@
 # Code Comment Generation
 
-Code and data for paper: Automatic Generation of Text Descriptive Comments for Code Blocks.
+Code and data for paper: [Automatic Generation of Text Descriptive Comments for Code Blocks](https://www.aaai.org/ocs/index.php/AAAI/AAAI18/paper/view/16492/16072).
 
-## Libraries: tensorflow 1.3; numpy; python2.7
+## Resources
+Libraries: tensorflow 1.3; numpy; python2.7
 
 Put the Code Jam data in folder CodeComment_Data/Code_Jam
 
