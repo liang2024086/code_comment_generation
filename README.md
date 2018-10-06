@@ -30,5 +30,5 @@ For example, project cocos2d totally has 1181 commented methods, we split them i
 CodeComment_Code/run_code_gru.sh cocos2d 1000 1040 1181 800
 ```
 ### Run the demo
-Put the source code of cocos2d into the folder CodeComment_Data/Github/cocos2d then run run.sh file directly. 
+Put the source code of cocos2d into the folder CodeComment_Data/Github/cocos2d then run the run.sh file directly. 
 
