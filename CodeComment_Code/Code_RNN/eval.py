@@ -86,7 +86,7 @@ def eval(type):
 		elif abc == 2:
 	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=2,num_methods=30,state_size=state_size,save='weight_average/GCD/weight',cross_validation_index=i)
 		elif abc == 1:
-	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=1,num_methods=1997,state_size=state_size,save='weight_average/GCD/weight',cross_validation_index=i)
+	            accuracy,result = eval_network(sess,g=g,num_epochs=1,data_size=len(partial_trees),partial_trees=partial_trees,wether_train=1,num_methods=1997,state_size=state_size,save='weight_average_tmp/GCD/weight',cross_validation_index=i)
 	        accuracy_array.append(accuracy)
 
 		matrix = [ [0 for k in range(6)] for j in range(6)]

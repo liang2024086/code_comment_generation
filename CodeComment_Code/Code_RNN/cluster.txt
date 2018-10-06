@@ -1,0 +1,6 @@
+Consonants,4
+GoroSort,3
+Osmos,5
+Part_Elf,1
+Dijkstra,0
+All_Your_Base,2

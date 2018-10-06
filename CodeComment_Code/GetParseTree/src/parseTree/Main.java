@@ -110,7 +110,7 @@ System.out.println("Arg comment: " + Bmcl.comment);
 		for (Entry<Integer, String> en : interNodeToName.entrySet()){
 		    interPW.println(en.getKey() + " , " + en.getValue());
 		}
-                interPW.println(interNodeToName.size() + " , " + "UNK");
+		interPW.println(interNodeToName.size() + " , " + "UNK");
 		interPW.close();
 
 		System.out.println("size of inter node type: " + interNodeToName.size());

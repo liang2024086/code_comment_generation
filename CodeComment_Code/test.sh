@@ -41,38 +41,26 @@ genData(){
     cd ..
 }
 
-LIMIT=$1
-
-genData train ../../CodeComment_Data/Code_Jam/train/
+#genData train ../../CodeComment_Data/Code_Jam/train/
 
 # train the Code RNN (parse tree)
-echo ""
-echo "begin to train Code RNN"
+#echo ""
+#echo "begin to train Code RNN"
 
-echo "-- begin to generate data for training"
-cd Code_RNN
-if [ ! -d "data/" ]; then
-    mkdir data
-fi
-cp ../GetParseTree/output/* data/
-python gen_data.py train
-cd ..
+#echo "-- begin to generate data for training"
+#cd Code_RNN
+#if [ ! -d "data/" ]; then
+#    mkdir data
+#fi
+#cp ../GetParseTree/output/* data/
+#python gen_data.py train
+#cd ..
 
-genData val ../../CodeComment_Data/Code_Jam/val/
-echo "--begin to generate data for val"
-cd Code_RNN
-if [ ! -d "val_data/" ]; then
-    mkdir val_data
-fi
-cp ../GetParseTree/output/* val_data/
-python gen_data.py val
-
-echo "-- begin to train"
-python train.py ${LIMIT}
-cd ..
-
-echo "-- begin to generate data for evaluation"
 genData test ../../CodeComment_Data/Code_Jam/test/
+
+# train the Code RNN (parse tree)
+
+echo "begin to generate data for test"
 cd Code_RNN
 if [ ! -d "test_data/" ]; then
     mkdir test_data

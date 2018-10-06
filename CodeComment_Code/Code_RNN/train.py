@@ -92,7 +92,7 @@ def train_network(sess,g,num_epochs, data_size,partial_trees,state_size=4, verbo
             print ('save')
 	    #'''
 
-	accuracy = eval.eval('train')
+	accuracy = eval.eval('val')
 
     return accuracy
 
