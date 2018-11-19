@@ -31,14 +31,23 @@ CodeComment_Code/run_code_gru.sh cocos2d 1000 1040 1181 800
 ```
 #### Parameters of ten projects
 Activiti 900 940 1071 800
+
 aima-java 1000 1027 1127 800
+
 neo4j 1000 1040 1197 800
+
 cocos2d 1000 1040 1181 800
+
 rhino 1000 1040 1187 800
+
 spring-batch 1600 1650 1827 800
+
 Smack 2100 2180 2342 800
+
 guava 2300 2370 2530 800
+
 jersey 2300 2350 2539 800
+
 libgdx 2600 2650 2823 800
 
 ### Run the demo
